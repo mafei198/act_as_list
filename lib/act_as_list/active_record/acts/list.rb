@@ -65,10 +65,6 @@ module ActiveRecord
               end
             end
 
-            define_method :list_array do
-              send(options[:mount]).list_array
-            end
-
             define_method :in_list? do
               !!list_array.index(id)
             end
@@ -92,6 +88,10 @@ module ActiveRecord
               update_list_with new_list
             end
 
+            define_method :list_array do
+              send(options[:mount]).list_array
+            end
+
             define_method :update_list_with do |new_list|        
               send(options[:mount]).update_attribute(:order_list, new_list)
             end
@@ -102,7 +102,7 @@ module ActiveRecord
           class_eval do
             define_method :list do
               return [] if list_empty?
-              list_array.collect do |item_id|
+              item_ids.collect do |item_id|
                 send(options[:items]).each do |item|
                   break item if item.id == item_id
                 end
@@ -113,7 +113,7 @@ module ActiveRecord
               order_list == nil or order_list == ',' or order_list == ''
             end
 
-            def list_array
+            def item_ids
               str_array = order_list.split(',').delete_if{|e| e == '' }
               str_array.map{|item_id|item_id.to_i}
             end
