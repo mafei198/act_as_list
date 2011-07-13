@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.email = %q{mafei.198@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
+    "README",
     "README.rdoc"
   ]
   s.files = [
@@ -21,12 +22,21 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
+    "MIT-LICENSE",
+    "README",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "act_as_list.gemspec",
+    "init.rb",
+    "install.rb",
     "lib/act_as_list.rb",
+    "lib/act_as_list/active_record/acts/list.rb",
+    "test/act_as_list_test.rb",
     "test/helper.rb",
-    "test/test_act_as_list.rb"
+    "test/test_act_as_list.rb",
+    "test/test_helper.rb",
+    "uninstall.rb"
   ]
   s.homepage = %q{http://github.com/mafei198/act_as_list}
   s.licenses = [%q{MIT}]
