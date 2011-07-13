@@ -8,13 +8,19 @@ module ActiveRecord
       module ClassMethods
         def act_as_items(options = {})
           raise "Exceptions from act_as_list, you must figure out which model to mount.\n i.e \n act_as_list :mount => :xxx" if options[:mount] == nil
-          list_array = send(options[:mount]).list_array
+          lll = send(options[:mount]).list_array
+          puts "lll:#{lll}"
 
           class_eval do
             after_create  :add__to_list
             after_destroy :remove_from_list
 
+            define_method :list_array do
+              send(options[:mount]).list_array
+            end
+
             define_method :move_higher do
+              puts "in class_eval lll:#{lll}"
               if in_list? and !top? 
                 current = list_array.index(id)
                 list_array[current], list_array[current - 1] = list_array[current - 1], list_array[current]
