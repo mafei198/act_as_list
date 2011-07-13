@@ -86,7 +86,10 @@ module ActiveRecord
             end
 
             define_method :update_list_with do |new_list|        
+              puts "new_list:#{new_list}"
+              puts "send(options[:mount]):#{send(options[:mount])}"
               send(options[:mount]).update_attribute(:order_list, new_list)
+              puts send(options[:mount]).order_list
             end
           end
         end
