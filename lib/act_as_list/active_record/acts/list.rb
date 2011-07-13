@@ -58,7 +58,11 @@ module ActiveRecord
             define_method :exchange do |current_id,swap_id|
               arr = list_array
               arr[current_id], arr[swap_id] = arr[swap_id], arr[current_id]
-              update_list_with arr.join(',')
+              if update_list_with arr.join(',')
+                swap_id
+              else
+                false
+              end
             end
 
             define_method :list_array do
