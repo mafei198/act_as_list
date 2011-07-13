@@ -13,53 +13,56 @@ module ActiveRecord
             after_create  :add__to_list
             after_destroy :remove_from_list
 
-            define_method :list_array do
-              send(options[:mount]).list_array
-            end
-
             define_method :move_higher do
               if in_list? and !top? 
                 current = list_array.index(id)
-                list_array[current], list_array[current - 1] = list_array[current - 1], list_array[current]
-                update_list_with list_array.join(',')
+                exchange current, current - 1
               end
             end
 
             define_method :move_lower do
               if in_list? and !bottom?
                 current = list_array.index(id)
-                list_array[current], list_array[current + 1] = list_array[current + 1], list_array[current]
-                update_list_with list_array.join(',')
+                exchange current, current + 1
               end
             end
 
             define_method :move_to_top do
               if in_list? and !top? 
                 current = list_array.index(id)
-                list_array[current], list_array[0] = list_array[0], list_array[current]
-                update_list_with list_array.join(',')
+                exchange current, 0
               end
             end
 
             define_method :move_to_bottom do
               if in_list? and !bottom?
                 current = list_array.index(id)
-                list_array[current], list_array[list_array.length - 1] = list_array[list_array.length - 1], list_array[current]
-                update_list_with list_array.join(',')
+                exchange current, list_array.length - 1
               end
             end
 
             define_method :move_to do |location_number|
-              if location_number == 1
+              return false unless location_number >= 1 and location_number <= list_array.length 
+
+              case location_number
+              when 1
                 move_to_top
-              elsif location_number == list_array.length
+              when list_array.length
                 move_to_bottom
               else
-                return unless location_number > 0 and location_number < list_array.length - 1
                 current = list_array.index(id)
-                list_array[current], list_array[location_number - 1] = list_array[location_number - 1], list_array[current]
-                update_list_with list_array.join(',')
+                exchange current, location_number - 1
               end
+            end
+
+            define_method :exchange do |current_id,swap_id|
+              arr = list_array
+              arr[current_id], arr[swap_id] = arr[swap_id], arr[current_id]
+              update_list_with arr.join(',')
+            end
+
+            define_method :list_array do
+              send(options[:mount]).list_array
             end
 
             define_method :in_list? do
@@ -86,10 +89,7 @@ module ActiveRecord
             end
 
             define_method :update_list_with do |new_list|        
-              puts "new_list:#{new_list}"
-              puts "send(options[:mount]):#{send(options[:mount])}"
               send(options[:mount]).update_attribute(:order_list, new_list)
-              puts send(options[:mount]).order_list
             end
           end
         end
@@ -100,9 +100,7 @@ module ActiveRecord
               return [] if list_empty?
               list_array.collect do |item_id|
                 send(options[:items]).each do |item|
-                  if item.id == item_id
-                    break item
-                  end
+                  break item if item.id == item_id
                 end
               end
             end
