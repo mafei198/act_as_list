@@ -90,7 +90,7 @@ module ActiveRecord
 
         def act_as_list(options = {})
           class_eval do
-            def list
+            define_method :list do
               return [] if list_empty?
               list_array.collect do |item_id|
                 send(options[:items]).each do |item|
