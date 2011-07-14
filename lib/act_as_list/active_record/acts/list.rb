@@ -89,7 +89,7 @@ module ActiveRecord
             end
 
             define_method :list_array do
-              send(options[:mount]).list_array
+              send(options[:mount]).list_ids
             end
 
             define_method :update_list_with do |new_list|        
