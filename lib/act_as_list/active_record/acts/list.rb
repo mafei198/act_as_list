@@ -88,8 +88,9 @@ module ActiveRecord
               update_list_with new_list
             end
 
+            #get the xxx's list.(:mount => xxx)
             define_method :list_array do
-              send(options[:mount]).list_ids
+              send(options[:mount]).item_ids
             end
 
             define_method :update_list_with do |new_list|        
@@ -113,6 +114,7 @@ module ActiveRecord
               order_list == nil or order_list == ',' or order_list == ''
             end
 
+            #gei self's list's ids.
             def item_ids
               str_array = order_list.split(',').delete_if{|e| e == '' }
               str_array.map{|item_id|item_id.to_i}
