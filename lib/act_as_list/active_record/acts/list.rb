@@ -59,7 +59,7 @@ module ActiveRecord
               arr = list_array
               arr[current_id], arr[swap_id] = arr[swap_id], arr[current_id]
               if update_list_with arr.join(',')
-                swap_id
+                arr[current_id]
               else
                 false
               end
